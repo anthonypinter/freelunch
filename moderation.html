@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moderation — FreeLunch</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-900: #1b4332;
+      --green-700: #2d6a4f;
+      --green-500: #40916c;
+      --green-100: #d8f3dc;
+      --gray-900:  #111827;
+      --gray-700:  #374151;
+      --gray-500:  #6b7280;
+      --gray-200:  #e5e7eb;
+      --gray-100:  #f3f4f6;
+      --white:     #ffffff;
+      --amber-100: #fef3c7;
+      --amber-700: #b45309;
+      --red-100:   #fee2e2;
+      --red-600:   #dc2626;
+      --red-700:   #b91c1c;
+      --radius:    12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-900);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      background: linear-gradient(135deg, var(--green-900), var(--green-700));
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    .page-title {
+      color: rgba(255,255,255,.7);
+      font-size: .9rem;
+      font-weight: 500;
+      padding-left: 1rem;
+      border-left: 1px solid rgba(255,255,255,.25);
+    }
+    .count-badge {
+      border-radius: 999px;
+      padding: .25rem .8rem;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+    .badge-pending { background: var(--amber-100); color: var(--amber-700); }
+    .badge-clear   { background: var(--green-100); color: var(--green-700); }
+
+    .header-links {
+      display: flex;
+      gap: 1.25rem;
+    }
+    .header-links a {
+      color: rgba(255,255,255,.75);
+      font-size: .875rem;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .header-links a:hover { color: var(--white); }
+
+    /* ── Layout ── */
+    main {
+      flex: 1;
+      max-width: 780px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .queue-heading {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── Mod card ── */
+    .mod-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      display: flex;
+      gap: 0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      transition: opacity .4s, transform .4s;
+    }
+    .mod-card.card-approved {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+    .mod-card.card-rejected {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+
+    .mod-photo {
+      width: 180px;
+      flex-shrink: 0;
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .mod-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .mod-no-photo { font-size: 3rem; }
+
+    .mod-body {
+      flex: 1;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      min-width: 0;
+    }
+
+    .mod-desc {
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--gray-900);
+    }
+
+    /* User row */
+    .mod-user {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .mod-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--green-500);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .85rem;
+      font-weight: 700;
+      overflow: hidden;
+    }
+    .mod-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .mod-avatar-fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mod-user-info {
+      display: flex;
+      flex-direction: column;
+      gap: .05rem;
+      flex: 1;
+      min-width: 0;
+    }
+    .mod-name {
+      font-size: .875rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mod-handle {
+      font-size: .775rem;
+      color: var(--gray-500);
+    }
+    .mod-time {
+      font-size: .775rem;
+      color: var(--gray-500);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Action buttons */
+    .mod-actions {
+      display: flex;
+      gap: .75rem;
+      margin-top: auto;
+    }
+    .approve-btn,
+    .reject-btn {
+      flex: 1;
+      padding: .55rem;
+      border: none;
+      border-radius: 8px;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, opacity .2s;
+    }
+    .approve-btn {
+      background: var(--green-100);
+      color: var(--green-700);
+    }
+    .approve-btn:hover:not(:disabled) { background: var(--green-500); color: var(--white); }
+    .reject-btn {
+      background: var(--red-100);
+      color: var(--red-700);
+    }
+    .reject-btn:hover:not(:disabled) { background: var(--red-600); color: var(--white); }
+    .approve-btn:disabled,
+    .reject-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* ── States ── */
+    .empty-msg, .loading-msg {
+      color: var(--gray-500);
+      font-size: .95rem;
+      padding: 3rem 0;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .8rem;
+      color: var(--gray-500);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <div class="header-left">
+      <a href="index.html" class="logo">🥗 FreeLunch</a>
+      <span class="page-title">Moderation</span>
+      <span id="pending-badge" class="count-badge badge-pending">— pending</span>
+    </div>
+    <nav class="header-links">
+      <a href="profile.html">My Profile</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2 class="queue-heading">Pending Meals</h2>
+    <div id="queue-grid"></div>
+  </main>
+
+  <footer>FreeLunch &mdash; track free campus meals</footer>
+
+  <script type="module" src="js/moderation.js"></script>
+</body>
+</html>

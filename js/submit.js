@@ -126,6 +126,7 @@ form.addEventListener('submit', async (e) => {
       description,
       photo_url:   photoUrl,
       semester_id: currentSemester?.id ?? null,
+      status:      'pending',
     })
 
     if (insertError) throw insertError

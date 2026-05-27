@@ -113,7 +113,7 @@ async function loadMeals() {
 
   const { data: meals, error } = await supabase
     .from('meals')
-    .select('id, description, photo_url, created_at')
+    .select('id, description, photo_url, created_at, status')
     .eq('user_id', session.user.id)
     .order('created_at', { ascending: false })
 
@@ -130,6 +130,7 @@ async function loadMeals() {
           : `<span class="meal-no-photo">🍽</span>`}
       </div>
       <div class="meal-info">
+        ${statusBadge(meal.status)}
         <p class="meal-desc">${escapeHtml(meal.description)}</p>
         <p class="meal-date">${formatDate(meal.created_at)}</p>
         <button class="delete-btn" data-id="${meal.id}">Delete</button>
@@ -169,6 +170,12 @@ document.getElementById('signout-btn').addEventListener('click', async () => {
 })
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+
+function statusBadge(status) {
+  if (status === 'pending')  return '<span class="status-badge status-pending">Pending review</span>'
+  if (status === 'rejected') return '<span class="status-badge status-rejected">Rejected</span>'
+  return ''
+}
 
 function escapeHtml(str) {
   return String(str)

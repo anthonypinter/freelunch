@@ -20,6 +20,10 @@
       --gray-100:  #f3f4f6;
       --white:     #ffffff;
       --red-600:   #dc2626;
+      --red-100:   #fee2e2;
+      --red-700:   #b91c1c;
+      --amber-100: #fef3c7;
+      --amber-700: #b45309;
       --radius:    12px;
     }
 
@@ -264,6 +268,18 @@
       transition: color .2s;
     }
     .delete-btn:hover { color: var(--red-600); }
+
+    /* ── Status badges ── */
+    .status-badge {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: .2rem .6rem;
+      margin-bottom: .35rem;
+    }
+    .status-pending  { background: var(--amber-100); color: var(--amber-700); }
+    .status-rejected { background: var(--red-100);   color: var(--red-700); }
 
     /* ── Empty / loading ── */
     .empty-msg, .loading-msg {
