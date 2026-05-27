@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeLunch — Track Free Campus Meals</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-900: #1b4332;
+      --green-700: #2d6a4f;
+      --green-500: #40916c;
+      --green-400: #52b788;
+      --green-100: #d8f3dc;
+      --green-50:  #f0faf4;
+      --gray-900:  #111827;
+      --gray-700:  #374151;
+      --gray-500:  #6b7280;
+      --gray-200:  #e5e7eb;
+      --gray-100:  #f3f4f6;
+      --white:     #ffffff;
+      --radius:    12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--white);
+      color: var(--gray-900);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Nav ── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 62px;
+      border-bottom: 1px solid var(--gray-200);
+      background: var(--white);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--green-700);
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: .5rem 1.1rem;
+      border-radius: 8px;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .btn-ghost {
+      color: var(--gray-700);
+      border: 1.5px solid var(--gray-200);
+    }
+    .btn-ghost:hover { background: var(--gray-100); }
+    .btn-primary {
+      background: var(--green-500);
+      color: var(--white);
+    }
+    .btn-primary:hover { background: var(--green-700); }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(145deg, var(--green-900) 0%, var(--green-500) 100%);
+      color: var(--white);
+      padding: 5rem 2rem 4.5rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      padding: .3rem .9rem;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      letter-spacing: -.03em;
+      line-height: 1.15;
+      max-width: 640px;
+      margin: 0 auto .9rem;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      opacity: .88;
+      max-width: 480px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-hero-primary {
+      background: var(--white);
+      color: var(--green-700);
+      padding: .75rem 1.75rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 800;
+      transition: background .2s;
+    }
+    .btn-hero-primary:hover { background: var(--green-100); }
+    .btn-hero-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,.55);
+      padding: .75rem 1.75rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: background .2s;
+    }
+    .btn-hero-ghost:hover { background: rgba(255,255,255,.15); }
+
+    /* ── How it works ── */
+    .section {
+      padding: 4rem 2rem;
+      max-width: 980px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .section-label {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--green-500);
+      margin-bottom: .6rem;
+    }
+    .section-title {
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      margin-bottom: 2.5rem;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .step {
+      background: var(--green-50);
+      border: 1px solid var(--green-100);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: .75rem;
+    }
+    .step h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .4rem;
+    }
+    .step p {
+      font-size: .9rem;
+      color: var(--gray-700);
+      line-height: 1.55;
+    }
+
+    /* ── Dashboard preview CTA ── */
+    .dashboard-cta {
+      background: var(--gray-100);
+      border-top: 1px solid var(--gray-200);
+      padding: 3.5rem 2rem;
+      text-align: center;
+    }
+    .dashboard-cta h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: .5rem;
+    }
+    .dashboard-cta p {
+      color: var(--gray-500);
+      font-size: .95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: auto;
+      border-top: 1px solid var(--gray-200);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .8rem;
+      color: var(--gray-500);
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    footer a { color: var(--green-500); font-weight: 600; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ── -->
+  <nav class="nav">
+    <a href="index.html" class="logo">🥗 FreeLunch</a>
+    <div class="nav-right">
+      <a href="dashboard.html" class="btn btn-ghost">Live Dashboard</a>
+      <a href="login.html" class="btn btn-primary">Sign In</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <span class="hero-eyebrow">Free food tracker</span>
+    <h1>Who's eating for free on campus?</h1>
+    <p>Log every free meal you score, climb the leaderboard, and show off your finds to the whole campus.</p>
+    <div class="hero-actions">
+      <a href="login.html" class="btn-hero-primary">Get Started</a>
+      <a href="dashboard.html" class="btn-hero-ghost">View Live Dashboard</a>
+    </div>
+  </section>
+
+  <!-- ── How it works ── -->
+  <div class="section">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">Three steps to free food fame</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-icon">🔑</div>
+        <h3>Create an account</h3>
+        <p>Sign up with your email. It only takes a minute and gives you your own profile and meal history.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">📸</div>
+        <h3>Log your meals</h3>
+        <p>Snap a photo, add a description of where you scored the free food, and submit. Every meal counts.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">🏆</div>
+        <h3>Climb the leaderboard</h3>
+        <p>Compete weekly, monthly, and across the semester. The live dashboard shows who's eating best.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Dashboard CTA ── -->
+  <div class="dashboard-cta">
+    <h2>See what's being served right now</h2>
+    <p>The live dashboard updates in real time — perfect for a screen in the student union or common room.</p>
+    <a href="dashboard.html" class="btn btn-primary" style="font-size:1rem; padding:.75rem 1.75rem;">
+      Open Live Dashboard
+    </a>
+  </div>
+
+  <footer>
+    <span>FreeLunch &mdash; track free campus meals</span>
+    <span>
+      <a href="login.html">Sign in</a> &middot;
+      <a href="dashboard.html">Dashboard</a>
+    </span>
+  </footer>
+
+</body>
+</html>

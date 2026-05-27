@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Dashboard — FreeLunch</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ── Header ────────────────────────────────────────────────────────────── -->
+  <header class="display-header">
+    <div class="header-logo">
+      <span class="logo-icon">🥗</span>
+      <span class="logo-text">FreeLunch</span>
+      <span class="logo-tagline">Free meals on campus</span>
+    </div>
+    <div class="header-meta">
+      <span id="total-count" class="stat-pill">— meals logged</span>
+      <span id="live-clock" class="live-clock"></span>
+    </div>
+  </header>
+
+  <!-- ── Main display ───────────────────────────────────────────────────────── -->
+  <main class="display-main">
+
+    <!-- Carousel -->
+    <section class="panel carousel-panel">
+      <h2 class="panel-heading">📸 Recent Meals</h2>
+      <div class="carousel-wrapper">
+        <div class="carousel-inner">
+          <div id="carousel-track" class="carousel-track"></div>
+        </div>
+        <div class="carousel-controls">
+          <button class="carousel-btn" id="prev-btn" aria-label="Previous">&#8592;</button>
+          <div id="carousel-dots"></div>
+          <button class="carousel-btn" id="next-btn" aria-label="Next">&#8594;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leaderboard -->
+    <section class="panel leaderboard-panel">
+      <div class="lb-header">
+        <h2 class="panel-heading">🏆 Leaderboard</h2>
+        <span id="lb-period-label" class="period-badge">This Week</span>
+      </div>
+      <ul id="leaderboard-list"></ul>
+    </section>
+
+  </main>
+
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

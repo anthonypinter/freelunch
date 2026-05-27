@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — FreeLunch</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-900: #1b4332;
+      --green-700: #2d6a4f;
+      --green-500: #40916c;
+      --green-100: #d8f3dc;
+      --gray-900:  #111827;
+      --gray-700:  #374151;
+      --gray-500:  #6b7280;
+      --gray-200:  #e5e7eb;
+      --gray-100:  #f3f4f6;
+      --white:     #ffffff;
+      --red-100:   #fee2e2;
+      --red-700:   #b91c1c;
+      --radius:    12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-100);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      background: linear-gradient(135deg, var(--green-900), var(--green-700));
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+    .back-link {
+      color: rgba(255,255,255,.75);
+      font-size: .875rem;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--white); }
+
+    /* ── Card ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .auth-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.10);
+      width: 100%;
+      max-width: 420px;
+      overflow: hidden;
+    }
+
+    /* ── Tabs ── */
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 1rem;
+      font-size: .95rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: var(--gray-500);
+      border-bottom: 3px solid transparent;
+      transition: color .2s, border-color .2s;
+    }
+    .auth-tab:hover { color: var(--green-500); }
+    .auth-tab.active {
+      color: var(--green-700);
+      border-bottom-color: var(--green-500);
+    }
+
+    /* ── Form body ── */
+    .auth-body { padding: 1.75rem; }
+
+    .field { margin-bottom: 1.1rem; }
+    .field label {
+      display: block;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: .35rem;
+    }
+    .field input {
+      width: 100%;
+      padding: .65rem .85rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: .95rem;
+      color: var(--gray-900);
+      background: var(--white);
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+    }
+    .field input:focus {
+      border-color: var(--green-500);
+      box-shadow: 0 0 0 3px rgba(64,145,108,.15);
+    }
+    .field input::placeholder { color: var(--gray-500); }
+
+    /* ── Message ── */
+    .auth-message {
+      border-radius: 8px;
+      padding: .75rem 1rem;
+      font-size: .875rem;
+      font-weight: 500;
+      margin-bottom: 1.1rem;
+    }
+    .auth-message.error   { background: var(--red-100);   color: var(--red-700); }
+    .auth-message.success { background: var(--green-100); color: var(--green-700); }
+
+    /* ── Submit ── */
+    .submit-btn {
+      width: 100%;
+      padding: .75rem;
+      background: var(--green-500);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+      margin-top: .25rem;
+    }
+    .submit-btn:hover:not(:disabled) { background: var(--green-700); }
+    .submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    /* ── Footer hint ── */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .8rem;
+      color: var(--gray-500);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <a href="index.html" class="logo" style="text-decoration:none">
+      <span>🥗</span> FreeLunch
+    </a>
+    <a href="index.html" class="back-link">← Back to home</a>
+  </header>
+
+  <main>
+    <div class="auth-card">
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-mode="signin">Sign In</button>
+        <button class="auth-tab"        data-mode="register">Create Account</button>
+      </div>
+
+      <div class="auth-body">
+
+        <div id="auth-error" class="auth-message" hidden></div>
+
+        <form id="auth-form" novalidate>
+
+          <!-- Register-only fields -->
+          <div class="field" id="row-name" hidden>
+            <label for="display-name">Full Name</label>
+            <input id="display-name" type="text" placeholder="Jane Smith" autocomplete="name">
+          </div>
+
+          <div class="field" id="row-username" hidden>
+            <label for="username">Username</label>
+            <input id="username" type="text" placeholder="janesmith" autocomplete="username"
+                   pattern="[a-z0-9_]+" title="Letters, numbers, and underscores only">
+          </div>
+
+          <!-- Shared fields -->
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="you@colorado.edu"
+                   autocomplete="email" required>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="••••••••"
+                   autocomplete="current-password" required>
+          </div>
+
+          <!-- Register-only confirm -->
+          <div class="field" id="row-confirm" hidden>
+            <label for="confirm-password">Confirm Password</label>
+            <input id="confirm-password" type="password" placeholder="••••••••"
+                   autocomplete="new-password">
+          </div>
+
+          <button class="submit-btn" id="submit-btn" type="submit">Sign In</button>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>FreeLunch &mdash; track free campus meals</footer>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

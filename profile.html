@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile — FreeLunch</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-900: #1b4332;
+      --green-700: #2d6a4f;
+      --green-500: #40916c;
+      --green-400: #52b788;
+      --green-100: #d8f3dc;
+      --gray-900:  #111827;
+      --gray-700:  #374151;
+      --gray-500:  #6b7280;
+      --gray-200:  #e5e7eb;
+      --gray-100:  #f3f4f6;
+      --white:     #ffffff;
+      --red-600:   #dc2626;
+      --radius:    12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-900);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      background: linear-gradient(135deg, var(--green-900), var(--green-700));
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    .header-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .header-links a {
+      color: rgba(255,255,255,.75);
+      font-size: .875rem;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .header-links a:hover { color: var(--white); }
+    .signout-btn {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: var(--white);
+      padding: .35rem .85rem;
+      border-radius: 6px;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .signout-btn:hover { background: rgba(255,255,255,.25); }
+
+    /* ── Page layout ── */
+    main {
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    /* ── Profile card ── */
+    .profile-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.08);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 560px) {
+      .profile-card { flex-direction: column; text-align: center; }
+    }
+
+    /* Avatar */
+    .avatar-wrap { position: relative; flex-shrink: 0; }
+    .avatar {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      background: var(--green-500);
+      color: var(--white);
+      font-size: 2.2rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    #avatar-input { display: none; }
+    .change-avatar-btn {
+      display: block;
+      margin-top: .5rem;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--green-500);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      width: 100%;
+      transition: color .2s;
+    }
+    .change-avatar-btn:hover { color: var(--green-700); }
+
+    /* Identity */
+    .profile-identity { flex: 1; }
+    .profile-identity h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+    .profile-handle {
+      font-size: .9rem;
+      color: var(--gray-500);
+      margin-top: .2rem;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.1rem;
+      flex-wrap: wrap;
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--gray-100);
+      border-radius: 8px;
+      padding: .6rem 1.2rem;
+      min-width: 72px;
+    }
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--green-700);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-top: .25rem;
+      white-space: nowrap;
+    }
+
+    /* Log meal CTA */
+    .log-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      margin-top: 1.25rem;
+      padding: .55rem 1.2rem;
+      background: var(--green-500);
+      color: var(--white);
+      border-radius: 8px;
+      font-size: .9rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .log-btn:hover { background: var(--green-700); }
+
+    /* ── Meals section ── */
+    .meals-heading {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .meals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .meal-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow .2s;
+    }
+    .meal-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,.12); }
+
+    .meal-photo {
+      aspect-ratio: 4/3;
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .meal-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .meal-no-photo { font-size: 2.5rem; }
+
+    .meal-info {
+      padding: .85rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+    }
+    .meal-desc {
+      font-size: .9rem;
+      font-weight: 500;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+    .meal-date {
+      font-size: .75rem;
+      color: var(--gray-500);
+    }
+    .delete-btn {
+      margin-top: .4rem;
+      align-self: flex-start;
+      background: none;
+      border: none;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--gray-500);
+      cursor: pointer;
+      padding: 0;
+      transition: color .2s;
+    }
+    .delete-btn:hover { color: var(--red-600); }
+
+    /* ── Empty / loading ── */
+    .empty-msg, .loading-msg {
+      color: var(--gray-500);
+      font-size: .95rem;
+      padding: 2rem 0;
+    }
+    .empty-msg a { color: var(--green-500); font-weight: 600; text-decoration: none; }
+    .empty-msg a:hover { text-decoration: underline; }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .8rem;
+      color: var(--gray-500);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <a href="index.html" class="logo">🥗 FreeLunch</a>
+    <nav class="header-links">
+      <a href="submit.html">+ Log Meal</a>
+      <a href="dashboard.html">Dashboard</a>
+      <button class="signout-btn" id="signout-btn">Sign out</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Profile card -->
+    <div class="profile-card">
+      <div class="avatar-wrap">
+        <div class="avatar" id="profile-avatar"></div>
+        <input type="file" id="avatar-input" accept="image/*">
+        <button class="change-avatar-btn" id="change-avatar-btn">Change photo</button>
+      </div>
+
+      <div class="profile-identity">
+        <h1 id="profile-name">…</h1>
+        <p class="profile-handle" id="profile-handle"></p>
+
+        <div class="stats-row">
+          <div class="stat">
+            <span class="stat-value" id="stat-total">—</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="stat-weekly">—</span>
+            <span class="stat-label">This Week</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="stat-monthly">—</span>
+            <span class="stat-label">This Month</span>
+          </div>
+        </div>
+
+        <a href="submit.html" class="log-btn">+ Log a Meal</a>
+      </div>
+    </div>
+
+    <!-- Meal history -->
+    <h2 class="meals-heading">My Meals</h2>
+    <div id="meals-grid" class="meals-grid">
+      <p class="loading-msg">Loading…</p>
+    </div>
+
+  </main>
+
+  <footer>FreeLunch &mdash; track free campus meals</footer>
+
+  <script type="module" src="js/profile.js"></script>
+</body>
+</html>

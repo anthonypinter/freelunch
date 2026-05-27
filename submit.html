@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log a Meal — FreeLunch</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-900: #1b4332;
+      --green-700: #2d6a4f;
+      --green-500: #40916c;
+      --green-100: #d8f3dc;
+      --gray-900:  #111827;
+      --gray-700:  #374151;
+      --gray-500:  #6b7280;
+      --gray-300:  #d1d5db;
+      --gray-200:  #e5e7eb;
+      --gray-100:  #f3f4f6;
+      --white:     #ffffff;
+      --red-100:   #fee2e2;
+      --red-700:   #b91c1c;
+      --radius:    12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-900);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      background: linear-gradient(135deg, var(--green-900), var(--green-700));
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    .header-links {
+      display: flex;
+      gap: 1.25rem;
+    }
+    .header-links a {
+      color: rgba(255,255,255,.75);
+      font-size: .875rem;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .header-links a:hover { color: var(--white); }
+
+    /* ── Layout ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2.5rem 1rem 3rem;
+    }
+
+    .submit-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.10);
+      width: 100%;
+      max-width: 520px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 1.5rem 1.75rem 1.25rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .card-header h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--gray-900);
+    }
+    .semester-tag {
+      display: inline-block;
+      margin-top: .4rem;
+      font-size: .8rem;
+      font-weight: 600;
+      background: var(--green-100);
+      color: var(--green-700);
+      border-radius: 999px;
+      padding: .2rem .7rem;
+    }
+
+    .card-body { padding: 1.75rem; }
+
+    /* ── Drop zone ── */
+    .drop-zone {
+      border: 2px dashed var(--gray-300);
+      border-radius: 10px;
+      padding: 2.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      margin-bottom: 1.25rem;
+    }
+    .drop-zone:hover,
+    .drop-zone.drag-over {
+      border-color: var(--green-500);
+      background: var(--green-100);
+    }
+    .drop-icon { font-size: 2.5rem; display: block; margin-bottom: .5rem; }
+    .drop-label {
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+    .drop-hint {
+      font-size: .8rem;
+      color: var(--gray-500);
+      margin-top: .25rem;
+    }
+
+    /* ── Preview ── */
+    .photo-preview {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      background: var(--gray-100);
+      aspect-ratio: 4/3;
+    }
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .remove-btn {
+      position: absolute;
+      top: .6rem;
+      right: .6rem;
+      background: rgba(0,0,0,.55);
+      color: var(--white);
+      border: none;
+      border-radius: 999px;
+      padding: .3rem .75rem;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .remove-btn:hover { background: rgba(0,0,0,.8); }
+
+    /* ── Fields ── */
+    .field { margin-bottom: 1.25rem; }
+    .field label {
+      display: block;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: .4rem;
+    }
+    textarea {
+      width: 100%;
+      padding: .7rem .9rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: .95rem;
+      font-family: inherit;
+      color: var(--gray-900);
+      resize: vertical;
+      min-height: 90px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    textarea:focus {
+      border-color: var(--green-500);
+      box-shadow: 0 0 0 3px rgba(64,145,108,.15);
+    }
+    textarea::placeholder { color: var(--gray-500); }
+
+    /* ── Message ── */
+    .form-message {
+      border-radius: 8px;
+      padding: .75rem 1rem;
+      font-size: .875rem;
+      font-weight: 500;
+      margin-bottom: 1.1rem;
+    }
+    .form-message.error   { background: var(--red-100);   color: var(--red-700); }
+    .form-message.success { background: var(--green-100); color: var(--green-700); }
+
+    /* ── Submit ── */
+    .submit-btn {
+      width: 100%;
+      padding: .8rem;
+      background: var(--green-500);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .submit-btn:hover:not(:disabled) { background: var(--green-700); }
+    .submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .8rem;
+      color: var(--gray-500);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <a href="index.html" class="logo">🥗 FreeLunch</a>
+    <nav class="header-links">
+      <a href="profile.html">My Meals</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="submit-card">
+
+      <div class="card-header">
+        <h1>Log a Free Meal</h1>
+        <span class="semester-tag" id="semester-name">Loading semester…</span>
+      </div>
+
+      <div class="card-body">
+
+        <div id="form-message" class="form-message" hidden></div>
+
+        <form id="submit-form" novalidate>
+
+          <input id="photo-input" type="file" accept="image/*" hidden>
+
+          <!-- Drop zone -->
+          <div id="drop-zone" class="drop-zone">
+            <span class="drop-icon">📷</span>
+            <p class="drop-label">Click or drag a photo here</p>
+            <p class="drop-hint">Optional — but a pic is worth a thousand calories</p>
+          </div>
+
+          <!-- Preview -->
+          <div id="photo-preview" class="photo-preview" hidden>
+            <img id="preview-img" src="" alt="Preview">
+            <button type="button" class="remove-btn" id="remove-photo">Remove</button>
+          </div>
+
+          <div class="field">
+            <label for="description">What'd you score?</label>
+            <textarea
+              id="description"
+              placeholder="e.g. Free pizza at the CS club fair, plus drinks and cookies"
+              maxlength="280"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submit-btn">Log This Meal</button>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>FreeLunch &mdash; track free campus meals</footer>
+
+  <script type="module" src="js/submit.js"></script>
+</body>
+</html>
