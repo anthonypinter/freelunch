@@ -39,7 +39,7 @@ async function loadCarousel() {
   const { data: meals } = await supabase
     .from('meals')
     .select(`
-      id, description, photo_url, created_at,
+      id, description, how_to_get, photo_url, created_at,
       profiles:user_id ( display_name, username, avatar_url )
     `)
     .order('created_at', { ascending: false })
@@ -72,6 +72,7 @@ function renderCarousel() {
           : `<div class="carousel-no-photo"><span>🍽</span></div>`}
         <div class="carousel-caption">
           <p class="carousel-desc">${escapeHtml(meal.description)}</p>
+          ${meal.how_to_get ? `<p class="carousel-how">🎟 ${escapeHtml(meal.how_to_get)}</p>` : ''}
           <div class="carousel-user">
             ${avatar}
             <div class="carousel-user-info">

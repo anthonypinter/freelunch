@@ -74,12 +74,13 @@ async function register(email, password) {
   const { data, error } = await supabase.auth.signUp({ email, password })
   if (error) throw error
 
-  // Insert profile row
+  // Update profile row created by the DB trigger with display name and username
   if (data.user) {
     const { error: profileError } = await supabase
       .from('profiles')
-      .insert({ id: data.user.id, display_name: displayName, username })
-    if (profileError && profileError.code !== '23505') throw profileError
+      .update({ display_name: displayName, username })
+      .eq('id', data.user.id)
+    if (profileError) throw profileError
   }
 
   showSuccess('Account created! Check your email to confirm, then sign in.')

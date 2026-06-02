@@ -113,7 +113,7 @@ async function loadMeals() {
 
   const { data: meals, error } = await supabase
     .from('meals')
-    .select('id, description, photo_url, created_at, status')
+    .select('id, description, how_to_get, photo_url, created_at, status')
     .eq('user_id', session.user.id)
     .order('created_at', { ascending: false })
 
@@ -132,6 +132,7 @@ async function loadMeals() {
       <div class="meal-info">
         ${statusBadge(meal.status)}
         <p class="meal-desc">${escapeHtml(meal.description)}</p>
+        ${meal.how_to_get ? `<p class="meal-how">🎟 ${escapeHtml(meal.how_to_get)}</p>` : ''}
         <p class="meal-date">${formatDate(meal.created_at)}</p>
         <button class="delete-btn" data-id="${meal.id}">Delete</button>
       </div>

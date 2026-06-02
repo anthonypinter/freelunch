@@ -6,6 +6,7 @@ const preview     = document.getElementById('photo-preview')
 const previewImg  = document.getElementById('preview-img')
 const removeBtn   = document.getElementById('remove-photo')
 const descInput   = document.getElementById('description')
+const howToGet    = document.getElementById('how-to-get')
 const semesterEl  = document.getElementById('semester-name')
 const form        = document.getElementById('submit-form')
 const submitBtn   = document.getElementById('submit-btn')
@@ -99,6 +100,9 @@ form.addEventListener('submit', async (e) => {
   const description = descInput.value.trim()
   if (!description) { showMessage('Please add a description.', 'error'); return }
 
+  const howToGetVal = howToGet.value.trim()
+  if (!howToGetVal) { showMessage('Please describe what you had to do to get the meal.', 'error'); return }
+
   setLoading(true)
 
   try {
@@ -124,6 +128,7 @@ form.addEventListener('submit', async (e) => {
     const { error: insertError } = await supabase.from('meals').insert({
       user_id:     session.user.id,
       description,
+      how_to_get:  howToGetVal,
       photo_url:   photoUrl,
       semester_id: currentSemester?.id ?? null,
       status:      'pending',
@@ -132,7 +137,8 @@ form.addEventListener('submit', async (e) => {
     if (insertError) throw insertError
 
     showMessage('Meal logged! Nice score.', 'success')
-    descInput.value = ''
+    descInput.value  = ''
+    howToGet.value   = ''
     clearFile()
 
     setTimeout(() => { window.location.href = 'profile.html' }, 1500)

@@ -28,7 +28,7 @@ async function loadQueue() {
   const { data: meals, error } = await supabase
     .from('meals')
     .select(`
-      id, description, photo_url, created_at,
+      id, description, how_to_get, photo_url, created_at,
       profiles:user_id ( display_name, username, avatar_url )
     `)
     .eq('status', 'pending')
@@ -73,6 +73,7 @@ function renderCard(meal) {
       </div>
       <div class="mod-body">
         <p class="mod-desc">${escapeHtml(meal.description)}</p>
+        ${meal.how_to_get ? `<p class="mod-how">🎟 ${escapeHtml(meal.how_to_get)}</p>` : ''}
         <div class="mod-user">
           ${avatar}
           <div class="mod-user-info">
