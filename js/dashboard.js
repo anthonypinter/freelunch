@@ -138,11 +138,11 @@ async function loadLeaderboard(periodIndex) {
   document.getElementById('leaderboard-list').innerHTML =
     '<li class="loading-row"><span class="spinner"></span> Loading…</li>'
 
-  const { data } = await supabase.from(view).select('user_id, meal_count').limit(10)
+  const { data } = await supabase.from(view).select('user_id, display_name, username, meal_count').limit(10)
 
   const entries = (data || []).map((row, i) => ({
     rank: i + 1,
-    label: shortId(row.user_id),
+    label: row.display_name || row.username || shortId(row.user_id),
     count: row.meal_count,
   }))
 
