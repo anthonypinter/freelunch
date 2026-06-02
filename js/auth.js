@@ -121,5 +121,5 @@ function switchToSignIn() {
 // ── Redirect if already logged in ─────────────────────────────────────────────
 
 supabase.auth.getSession().then(({ data: { session } }) => {
-  if (session) window.location.href = 'index.html'
+  if (session) window.location.href = 'profile.html'
 })
