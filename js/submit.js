@@ -22,6 +22,17 @@ async function init() {
   const { data: { session: s } } = await supabase.auth.getSession()
   if (!s) { window.location.href = 'login.html'; return }
   session = s
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('is_admin')
+    .eq('id', session.user.id)
+    .single()
+
+  if (profile?.is_admin) {
+    document.getElementById('mod-nav-link').hidden = false
+  }
+
   await loadSemester()
 }
 

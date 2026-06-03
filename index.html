@@ -233,7 +233,8 @@
     <a href="index.html" class="logo">🥗 There's No Such Thing as a Free Lunch</a>
     <div class="nav-right">
       <a href="dashboard.html" class="btn btn-ghost">Live Dashboard</a>
-      <a href="login.html" class="btn btn-primary">Sign In</a>
+      <a href="moderation.html" class="btn btn-ghost" id="mod-nav-link" style="display:none">Moderation</a>
+      <a href="login.html" class="btn btn-primary" id="signin-nav-btn">Sign In</a>
     </div>
   </nav>
 
@@ -288,5 +289,26 @@
     </span>
   </footer>
 
+
+  <script type="module">
+    import { supabase } from './js/supabase.js'
+
+    const { data: { session } } = await supabase.auth.getSession()
+    if (session) {
+      const signinBtn = document.getElementById('signin-nav-btn')
+      signinBtn.href = 'profile.html'
+      signinBtn.textContent = 'My Profile'
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', session.user.id)
+        .single()
+
+      if (profile?.is_admin) {
+        document.getElementById('mod-nav-link').style.display = ''
+      }
+    }
+  </script>
 </body>
 </html>

@@ -17,12 +17,15 @@ async function init() {
 async function loadProfile() {
   const { data } = await supabase
     .from('profiles')
-    .select('display_name, username, avatar_url')
+    .select('display_name, username, avatar_url, is_admin')
     .eq('id', session.user.id)
     .single()
 
   profile = data || {}
   renderProfile()
+  if (profile.is_admin) {
+    document.getElementById('mod-nav-link').hidden = false
+  }
 }
 
 function renderProfile() {
