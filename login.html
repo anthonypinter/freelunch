@@ -189,32 +189,32 @@
           <!-- Register-only fields -->
           <div class="field" id="row-name" hidden>
             <label for="display-name">Full Name</label>
-            <input id="display-name" type="text" placeholder="Jane Smith" autocomplete="name">
+            <input id="display-name" name="name" type="text" placeholder="Jane Smith" autocomplete="name">
           </div>
 
           <div class="field" id="row-username" hidden>
             <label for="username">Username</label>
-            <input id="username" type="text" placeholder="janesmith" autocomplete="username"
+            <input id="username" name="nickname" type="text" placeholder="janesmith" autocomplete="nickname"
                    pattern="[a-z0-9_]+" title="Letters, numbers, and underscores only">
           </div>
 
           <!-- Shared fields -->
           <div class="field">
             <label for="email">Email</label>
-            <input id="email" type="email" placeholder="you@colorado.edu"
+            <input id="email" name="email" type="email" placeholder="you@colorado.edu"
                    autocomplete="email" required>
           </div>
 
           <div class="field">
             <label for="password">Password</label>
-            <input id="password" type="password" placeholder="••••••••"
+            <input id="password" name="password" type="password" placeholder="••••••••"
                    autocomplete="current-password" required>
           </div>
 
           <!-- Register-only confirm -->
           <div class="field" id="row-confirm" hidden>
             <label for="confirm-password">Confirm Password</label>
-            <input id="confirm-password" type="password" placeholder="••••••••"
+            <input id="confirm-password" name="confirm-password" type="password" placeholder="••••••••"
                    autocomplete="new-password">
           </div>
 
