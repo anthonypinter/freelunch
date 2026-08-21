@@ -28,6 +28,7 @@ async function loadTotalCount() {
   const { count } = await supabase
     .from('meals')
     .select('*', { count: 'exact', head: true })
+    .eq('status', 'approved')
 
   const el = document.getElementById('total-count')
   if (count != null) el.textContent = `${count.toLocaleString()} meal${count !== 1 ? 's' : ''} logged`
@@ -46,6 +47,7 @@ async function loadCarousel() {
       id, description, how_to_get, photo_url, created_at,
       profiles:user_id ( display_name, username, avatar_url )
     `)
+    .eq('status', 'approved')
     .order('created_at', { ascending: false })
     .limit(12)
 

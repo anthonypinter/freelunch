@@ -98,7 +98,7 @@ async function loadStats() {
   const uid = session.user.id
 
   const [totalRes, weeklyRes, monthlyRes, semesterRes] = await Promise.all([
-    supabase.from('meals').select('*', { count: 'exact', head: true }).eq('user_id', uid),
+    supabase.from('meals').select('*', { count: 'exact', head: true }).eq('user_id', uid).eq('status', 'approved'),
     supabase.from('leaderboard_weekly').select('meal_count').eq('user_id', uid).single(),
     supabase.from('leaderboard_monthly').select('meal_count').eq('user_id', uid).single(),
     supabase.from('leaderboard_semester').select('meal_count').eq('user_id', uid).single(),
