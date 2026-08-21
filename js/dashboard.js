@@ -13,6 +13,10 @@ function initClock() {
       weekday: 'short', month: 'short', day: 'numeric',
       hour: 'numeric', minute: '2-digit'
     })
+      .replace(/,/g, '')
+      .replace(/\bat\b/gi, '')
+      .replace(/\s+/g, ' ')
+      .trim()
   }
   tick()
   setInterval(tick, 30000)
@@ -72,7 +76,7 @@ function renderCarousel() {
           : `<div class="carousel-no-photo"><span>🍽</span></div>`}
         <div class="carousel-caption">
           <p class="carousel-desc">${escapeHtml(meal.description)}</p>
-          ${meal.how_to_get ? `<p class="carousel-how">🎟 ${escapeHtml(meal.how_to_get)}</p>` : ''}
+          ${meal.how_to_get ? `<p class="carousel-how">${escapeHtml(meal.how_to_get)}</p>` : ''}
           <div class="carousel-user">
             ${avatar}
             <div class="carousel-user-info">
@@ -85,8 +89,6 @@ function renderCarousel() {
       </div>
     `
   }).join('')
-
-  renderDots()
 }
 
 function goToSlide(index) {
@@ -95,28 +97,11 @@ function goToSlide(index) {
   slides[carouselIndex]?.classList.remove('active')
   carouselIndex = ((index % carouselItems.length) + carouselItems.length) % carouselItems.length
   slides[carouselIndex]?.classList.add('active')
-  renderDots()
-}
-
-function renderDots() {
-  const container = document.getElementById('carousel-dots')
-  container.innerHTML = carouselItems.map((_, i) =>
-    `<span class="dot ${i === carouselIndex ? 'active' : ''}"></span>`
-  ).join('')
 }
 
 function startCarousel() {
   clearInterval(carouselTimer)
   carouselTimer = setInterval(() => goToSlide(carouselIndex + 1), CAROUSEL_INTERVAL_MS)
-}
-
-function initCarouselButtons() {
-  document.getElementById('prev-btn').addEventListener('click', () => {
-    goToSlide(carouselIndex - 1); startCarousel()
-  })
-  document.getElementById('next-btn').addEventListener('click', () => {
-    goToSlide(carouselIndex + 1); startCarousel()
-  })
 }
 
 // ── Leaderboard ───────────────────────────────────────────────────────────────
@@ -138,7 +123,7 @@ async function loadLeaderboard(periodIndex) {
   document.getElementById('leaderboard-list').innerHTML =
     '<li class="loading-row"><span class="spinner"></span> Loading…</li>'
 
-  const { data } = await supabase.from(view).select('user_id, display_name, username, meal_count').limit(10)
+  const { data } = await supabase.from(view).select('user_id, display_name, username, meal_count').limit(8)
 
   const entries = (data || []).map((row, i) => ({
     rank: i + 1,
@@ -160,7 +145,7 @@ function renderLeaderboard(entries) {
     <li class="lb-row rank-${e.rank}">
       <span class="lb-rank">${medalFor(e.rank)}</span>
       <span class="lb-name">${escapeHtml(e.label)}</span>
-      <span class="lb-count">${e.count}</span>
+      <span class="lb-count">${e.count} meal${e.count !== 1 ? 's' : ''}</span>
     </li>
   `).join('')
 }
@@ -205,7 +190,11 @@ function shortId(uuid) {
 }
 
 function medalFor(rank) {
-  return rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`
+  const mod100 = rank % 100
+  const suffix = (mod100 >= 11 && mod100 <= 13)
+    ? 'th'
+    : { 1: 'st', 2: 'nd', 3: 'rd' }[rank % 10] || 'th'
+  return `${rank}<sup>${suffix}</sup>`
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
@@ -214,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initClock()
   loadTotalCount()
   loadCarousel()
-  initCarouselButtons()
   loadLeaderboard(0)
   startLeaderboardCycle()
   startDataRefresh()

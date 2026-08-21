@@ -97,15 +97,17 @@ document.getElementById('change-avatar-btn').addEventListener('click', () => {
 async function loadStats() {
   const uid = session.user.id
 
-  const [totalRes, weeklyRes, monthlyRes] = await Promise.all([
+  const [totalRes, weeklyRes, monthlyRes, semesterRes] = await Promise.all([
     supabase.from('meals').select('*', { count: 'exact', head: true }).eq('user_id', uid),
     supabase.from('leaderboard_weekly').select('meal_count').eq('user_id', uid).single(),
     supabase.from('leaderboard_monthly').select('meal_count').eq('user_id', uid).single(),
+    supabase.from('leaderboard_semester').select('meal_count').eq('user_id', uid).single(),
   ])
 
-  document.getElementById('stat-total').textContent   = totalRes.count   ?? 0
-  document.getElementById('stat-weekly').textContent  = weeklyRes.data?.meal_count  ?? 0
-  document.getElementById('stat-monthly').textContent = monthlyRes.data?.meal_count ?? 0
+  document.getElementById('stat-total').textContent    = totalRes.count   ?? 0
+  document.getElementById('stat-weekly').textContent   = weeklyRes.data?.meal_count  ?? 0
+  document.getElementById('stat-monthly').textContent  = monthlyRes.data?.meal_count ?? 0
+  document.getElementById('stat-semester').textContent = semesterRes.data?.meal_count ?? 0
 }
 
 // ── Meals grid ────────────────────────────────────────────────────────────────

@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Dashboard — There's No Such Thing as a Free Lunch</title>
+  <title>The Lunch Games | Live Dashboard</title>
+  <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Lunch Games" />
+  <link rel="manifest" href="/images/favicon/site.webmanifest" />
+  <link rel="stylesheet" href="https://use.typekit.net/otp1fyf.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -11,12 +18,11 @@
   <!-- ── Header ────────────────────────────────────────────────────────────── -->
   <header class="display-header">
     <a href="index.html" class="header-logo">
-      <span class="logo-icon">🥗</span>
-      <span class="logo-text">There's No Such Thing as a Free Lunch</span>
-      <span class="logo-tagline">Free meals on campus</span>
+      <span class="logo-text">THE LUNCH GAMES</span>
     </a>
     <div class="header-meta">
       <span id="total-count" class="stat-pill">— meals logged</span>
+      <span class="header-divider" aria-hidden="true">|</span>
       <span id="live-clock" class="live-clock"></span>
     </div>
   </header>
@@ -26,15 +32,10 @@
 
     <!-- Carousel -->
     <section class="panel carousel-panel">
-      <h2 class="panel-heading">📸 Recent Meals</h2>
+      <h2 class="panel-heading">Recent Meals</h2>
       <div class="carousel-wrapper">
         <div class="carousel-inner">
           <div id="carousel-track" class="carousel-track"></div>
-        </div>
-        <div class="carousel-controls">
-          <button class="carousel-btn" id="prev-btn" aria-label="Previous">&#8592;</button>
-          <div id="carousel-dots"></div>
-          <button class="carousel-btn" id="next-btn" aria-label="Next">&#8594;</button>
         </div>
       </div>
     </section>
@@ -42,13 +43,27 @@
     <!-- Leaderboard -->
     <section class="panel leaderboard-panel">
       <div class="lb-header">
-        <h2 class="panel-heading">🏆 Leaderboard</h2>
+        <h2 class="panel-heading">Leaderboard</h2>
         <span id="lb-period-label" class="period-badge">This Week</span>
       </div>
       <ul id="leaderboard-list"></ul>
     </section>
 
+    <!-- QR / join CTA -->
+    <section class="panel qr-panel">
+      <h2 class="panel-heading">Join the Fray, Win the Tray</h2>
+      <div class="qr-panel-inner">
+        <img src="images/qr.svg" alt="QR code to join The Lunch Games" class="qr-placeholder">
+      </div>
+    </section>
+
   </main>
+
+  <footer>
+    <a href="https://lab.whaaat.io" class="footer-link">From the humans of whaaaat!?</a>
+    <img src="images/silversaucerlogo.svg" alt="The Society of the Silver Saucers" class="footer-logo">
+    <span class="footer-text">The society of the silver saucers</span>
+  </footer>
 
   <script type="module" src="js/dashboard.js"></script>
 </body>
