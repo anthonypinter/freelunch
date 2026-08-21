@@ -110,6 +110,16 @@
       }
     }
     main p { color: var(--gray-light); line-height: 1.6; }
+    main a {
+      color: var(--gold);
+      text-decoration: none;
+      background-image: linear-gradient(currentColor, currentColor);
+      background-position: 0 100%;
+      background-repeat: no-repeat;
+      background-size: 0% 1px;
+      transition: background-size .25s ease;
+    }
+    main a:hover { background-size: 100% 1px; }
 
     .faq-list {
       display: flex;
@@ -188,24 +198,49 @@
 
     <div class="faq-list">
       <div class="faq-item">
-        <p class="faq-question">Lorem ipsum dolor sit amet, consectetur adipiscing elit?</p>
-        <p class="faq-answer">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Curabitur pretium tincidunt lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus.</p>
+        <p class="faq-question">What are The Lunch Games?</p>
+        <p class="faq-answer">The Lunch Games is a semester-long competition to see who can get the most free meals on campus. Inspired by the phrase &ldquo;There&rsquo;s no such thing as a free lunch,&rdquo; competitors submit photos of their free meals along with a description of what they had to do to get that free meal.</p>
       </div>
       <div class="faq-item">
-        <p class="faq-question">Duis aute irure dolor in reprehenderit in voluptate velit esse?</p>
-        <p class="faq-answer">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. Nulla facilisi. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+        <p class="faq-question">Who created The Lunch Games?</p>
+        <p class="faq-answer">The concept of The Lunch Games was conceived by the Humans of Whaaat!? during a lunchtime meeting (that we all paid for).</p>
       </div>
       <div class="faq-item">
-        <p class="faq-question">Quis autem vel eum iure reprehenderit qui in ea voluptate?</p>
-        <p class="faq-answer">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+        <p class="faq-question">What does the winner of The Lunch Games get?</p>
+        <p class="faq-answer">The winner of each semester&rsquo;s Lunch Games will receive a customized silver lunch tray courtesy of our partners, the Society of Silver Saucers. The tray will commemorate the semester and the victor&rsquo;s number of free meals.</p>
       </div>
       <div class="faq-item">
-        <p class="faq-question">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet?</p>
-        <p class="faq-answer">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod.</p>
+        <p class="faq-question">How will I know if I won The Lunch Games?</p>
+        <p class="faq-answer">You&rsquo;ll feel a certain sense of full satisfaction that only comes with winning food based competitions. Ask <a href="https://www.youtube.com/watch?v=iOl6ru3UEoM">Joey Chestnut about that, he&rsquo;ll learn you something real good.</a></p>
       </div>
       <div class="faq-item">
-        <p class="faq-question">Sed posuere consectetur est at lobortis pretium ipsum dolor?</p>
-        <p class="faq-answer">Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec id elit non mi porta gravida at eget metus. Aenean eu leo quam pellentesque ornare sem lacinia quam venenatis vestibulum.</p>
+        <p class="faq-question">How does The Lunch Games prevent cheating?</p>
+        <p class="faq-answer">All posts are reviewed by our crack team of free meal detectives before being included in the competition's totals.</p>
+      </div>
+
+      <div class="faq-item">
+        <p class="faq-question">What is the Society of the Silver Saucers?</p>
+        <p class="faq-answer">You&rsquo;ll have to ask them.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-question">Can I compete in The Lunch Games?</p>
+        <p class="faq-answer">The Lunch Games are open to any individual on CU Boulder's campus. <a href="https://lunch.games">Join the fray, earn the tray.</a></p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-question">Where does the phrase &ldquo;There&rsquo;s no such thing as a free lunch&rdquo; come from?</p>
+        <p class="faq-answer">It historically refers to the late 19th century practice of giving saloon patrons a free lunch if they bought a drink. Traditionally, the lunch provided was very salty as a way to encourage additional beverage purchases. More broadly, it is used societally as a way of acknowledging that one cannot get something for nothing.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-question">Who are the Humans of Whaaat!?</p>
+        <p class="faq-answer">Whaaatlandians, Whaaatopians, Whaaaatari, Whaaatians are all known sub-groups of humans of Whaaat!?</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-question">What is Whaaat!?</p>
+        <p class="faq-answer">Some would say it is <a href="https://whaaat.io">a glorious revolutionary micronation of play.</a> Others would suggest that it is <a href="https://lab.whaaat.io">a lab for experimental games and alternative controls.</a> A third group would argue that Whaaat!? isn&rsquo;t a thing, but rather a feeling. During the Schism of 2022, a fourth group broke off and started advocating for Quoooi?!. We respect their beliefs, but think they might be missing a certain je ne sais quoi in their system.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-question">Is there really such a thing as a free lunch?</p>
+        <p class="faq-answer">In this economy?</p>
       </div>
     </div>
   </main>
