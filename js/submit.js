@@ -108,6 +108,8 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault()
   clearMessage()
 
+  if (!selectedFile) { showMessage('Please add a photo.', 'error'); return }
+
   const description = descInput.value.trim()
   if (!description) { showMessage('Please add a description.', 'error'); return }
 
@@ -117,24 +119,18 @@ form.addEventListener('submit', async (e) => {
   setLoading(true)
 
   try {
-    let photoUrl = null
+    const ext  = selectedFile.name.split('.').pop()
+    const path = `public/${session.user.id}-${Date.now()}.${ext}`
 
-    if (selectedFile) {
-      const ext  = selectedFile.name.split('.').pop()
-      const path = `public/${session.user.id}-${Date.now()}.${ext}`
+    const { data: file, error: uploadError } = await supabase.storage
+      .from('meal-photos')
+      .upload(path, selectedFile, { upsert: false })
 
-      const { data: file, error: uploadError } = await supabase.storage
-        .from('meal-photos')
-        .upload(path, selectedFile, { upsert: false })
+    if (uploadError) throw uploadError
 
-      if (uploadError) throw uploadError
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('meal-photos')
-        .getPublicUrl(file.path)
-
-      photoUrl = publicUrl
-    }
+    const { data: { publicUrl: photoUrl } } = supabase.storage
+      .from('meal-photos')
+      .getPublicUrl(file.path)
 
     const { error: insertError } = await supabase.from('meals').insert({
       user_id:     session.user.id,
@@ -177,3 +173,10 @@ function setLoading(on) {
 }
 
 document.addEventListener('DOMContentLoaded', init)
+
+// ── Sign out ──────────────────────────────────────────────────────────────────
+
+document.getElementById('signout-btn').addEventListener('click', async () => {
+  await supabase.auth.signOut()
+  window.location.href = 'login.html'
+})
