@@ -100,6 +100,10 @@ a { text-decoration: none; color: inherit; }
   .logo-text { font-size: 2rem; }
   .header-meta { width: 100%; justify-content: center; }
 }
+@media (max-width: 560px) {
+  .header-meta { flex-direction: column; align-items: center; gap: .35rem; }
+  .header-divider { display: none; }
+}
 .nav-link {
   font-family: var(--font-body);
   font-weight: 700;
@@ -416,14 +420,13 @@ footer {
   justify-self: end;
 }
 .footer-link:hover { color: var(--white); }
-.footer-logo { height: clamp(24px, 4vh, 34px); width: auto; justify-self: center; }
+.footer-logo { height: clamp(18px, 6vw, 34px); width: auto; justify-self: center; }
 .footer-text { justify-self: start; }
 
 @media (max-width: 560px) {
   footer {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    row-gap: .4rem;
+    column-gap: clamp(.4rem, 2vw, .75rem);
+    font-size: clamp(.5rem, 2.2vw, .65rem);
     text-align: center;
   }
   .footer-link, .footer-text { justify-self: center; }
