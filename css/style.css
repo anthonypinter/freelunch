@@ -451,3 +451,9 @@ footer {
   #leaderboard-list { flex: none; overflow-y: visible; }
   .qr-panel-inner { flex: none; }
 }
+
+/* ── Phone screens: give the carousel photo and QR code more room ── */
+@media (max-width: 560px) {
+  .carousel-inner { height: min(90vw, 440px); }
+  .qr-placeholder { width: min(80vw, 320px); height: min(80vw, 320px); }
+}
