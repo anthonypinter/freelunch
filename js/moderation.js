@@ -1,5 +1,7 @@
 import { supabase } from './supabase.js'
 
+const NO_PHOTO_ICON = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.7"/><path d="m4 17 5-5 3.5 3.5L17 10l3 4"/></svg>'
+
 let pendingCount = 0
 
 // ── Auth + admin guard ────────────────────────────────────────────────────────
@@ -43,7 +45,7 @@ async function loadQueue() {
   updateCountBadge()
 
   if (!pendingCount) {
-    grid.innerHTML = '<p class="empty-msg">No meals pending review. All clear! ✅</p>'
+    grid.innerHTML = '<p class="empty-msg">No meals pending review. All clear!</p>'
     return
   }
 
@@ -69,11 +71,11 @@ function renderCard(meal) {
       <div class="mod-photo">
         ${meal.photo_url
           ? `<img src="${escapeHtml(meal.photo_url)}" alt="${escapeHtml(meal.description)}" loading="lazy">`
-          : `<span class="mod-no-photo">🍽</span>`}
+          : `<span class="mod-no-photo">${NO_PHOTO_ICON}</span>`}
       </div>
       <div class="mod-body">
         <p class="mod-desc">${escapeHtml(meal.description)}</p>
-        ${meal.how_to_get ? `<p class="mod-how">🎟 ${escapeHtml(meal.how_to_get)}</p>` : ''}
+        ${meal.how_to_get ? `<p class="mod-how">${escapeHtml(meal.how_to_get)}</p>` : ''}
         <div class="mod-user">
           ${avatar}
           <div class="mod-user-info">
@@ -83,8 +85,8 @@ function renderCard(meal) {
           <span class="mod-time">${timeAgo(meal.created_at)}</span>
         </div>
         <div class="mod-actions">
-          <button class="approve-btn" data-id="${meal.id}">✓ Approve</button>
-          <button class="reject-btn"  data-id="${meal.id}">✗ Reject</button>
+          <button class="approve-btn" data-id="${meal.id}">Approve</button>
+          <button class="reject-btn"  data-id="${meal.id}">Reject</button>
         </div>
       </div>
     </div>
@@ -117,7 +119,7 @@ async function moderate(id, status) {
     updateCountBadge()
     if (!document.querySelector('.mod-card')) {
       document.getElementById('queue-grid').innerHTML =
-        '<p class="empty-msg">No meals pending review. All clear! ✅</p>'
+        '<p class="empty-msg">No meals pending review. All clear!</p>'
     }
   }, 600)
 }

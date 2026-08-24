@@ -209,7 +209,12 @@ a { text-decoration: none; color: inherit; }
   align-items: center;
   justify-content: center;
   background: #1a1a1a;
-  font-size: 5rem;
+}
+.carousel-no-photo span {
+  display: inline-flex;
+  width: 5rem;
+  height: 5rem;
+  color: var(--gray-light);
 }
 .carousel-caption {
   position: absolute;

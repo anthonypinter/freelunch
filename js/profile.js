@@ -1,5 +1,7 @@
 import { supabase } from './supabase.js'
 
+const NO_PHOTO_ICON = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.7"/><path d="m4 17 5-5 3.5 3.5L17 10l3 4"/></svg>'
+
 let session = null
 let profile = null
 
@@ -132,12 +134,12 @@ async function loadMeals() {
       <div class="meal-photo">
         ${meal.photo_url
           ? `<img src="${escapeHtml(meal.photo_url)}" alt="${escapeHtml(meal.description)}" loading="lazy">`
-          : `<span class="meal-no-photo">🍽</span>`}
+          : `<span class="meal-no-photo">${NO_PHOTO_ICON}</span>`}
       </div>
       <div class="meal-info">
         ${statusBadge(meal.status)}
         <p class="meal-desc">${escapeHtml(meal.description)}</p>
-        ${meal.how_to_get ? `<p class="meal-how">🎟 ${escapeHtml(meal.how_to_get)}</p>` : ''}
+        ${meal.how_to_get ? `<p class="meal-how">${escapeHtml(meal.how_to_get)}</p>` : ''}
         <p class="meal-date">${formatDate(meal.created_at)}</p>
         <button class="delete-btn" data-id="${meal.id}">Delete</button>
       </div>

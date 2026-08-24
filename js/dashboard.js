@@ -1,5 +1,7 @@
 import { supabase } from './supabase.js'
 
+const NO_PHOTO_ICON = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.7"/><path d="m4 17 5-5 3.5 3.5L17 10l3 4"/></svg>'
+
 const CAROUSEL_INTERVAL_MS  = 5000   // advance slide every 5s
 const LEADERBOARD_CYCLE_MS  = 10000  // cycle period tab every 10s
 const DATA_REFRESH_MS       = 120000 // re-fetch data every 2 min
@@ -75,7 +77,7 @@ function renderCarousel() {
       <div class="carousel-slide ${i === 0 ? 'active' : ''}">
         ${meal.photo_url
           ? `<img src="${escapeHtml(meal.photo_url)}" alt="${escapeHtml(meal.description)}" loading="lazy">`
-          : `<div class="carousel-no-photo"><span>🍽</span></div>`}
+          : `<div class="carousel-no-photo"><span>${NO_PHOTO_ICON}</span></div>`}
         <div class="carousel-caption">
           <p class="carousel-desc">${escapeHtml(meal.description)}</p>
           ${meal.how_to_get ? `<p class="carousel-how">${escapeHtml(meal.how_to_get)}</p>` : ''}

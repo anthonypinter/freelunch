@@ -80,16 +80,6 @@
       color: var(--gold);
       white-space: nowrap;
     }
-    .page-title {
-      font-family: var(--font-body);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--gray-light);
-      font-size: .85rem;
-      padding-left: 1rem;
-      border-left: 1px solid rgba(255,255,255,.25);
-    }
     .count-badge {
       border-radius: 999px;
       padding: .25rem .8rem;
@@ -122,6 +112,10 @@
     @media (max-width: 700px) {
       .page-header { justify-content: center; text-align: center; }
       .header-left, .header-links { justify-content: center; width: 100%; }
+      .header-left { display: contents; }
+      .logo { order: 1; width: 100%; justify-content: center; }
+      .header-links { order: 2; }
+      #pending-badge { order: 3; width: 100%; }
     }
 
     /* ── Layout ── */
@@ -176,7 +170,7 @@
       width: 100%; height: 100%;
       object-fit: cover;
     }
-    .mod-no-photo { font-size: 3rem; }
+    .mod-no-photo { display: inline-flex; width: 3rem; height: 3rem; color: var(--gray-500); }
 
     .mod-body {
       flex: 1;
@@ -331,7 +325,6 @@
   <header class="page-header">
     <div class="header-left">
       <a href="index.html" class="logo">THE LUNCH GAMES</a>
-      <span class="page-title">Moderation</span>
       <span id="pending-badge" class="count-badge badge-pending">— pending</span>
     </div>
     <nav class="header-links">
