@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Lunch Games | Home</title>
+  <title>The Lunch Games</title>
   <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
   <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
@@ -15,21 +15,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --green-900: #1b4332;
-      --green-700: #2d6a4f;
-      --green-500: #40916c;
-      --green-400: #52b788;
-      --green-100: #d8f3dc;
-      --green-50:  #f0faf4;
-      --gray-900:  #111827;
-      --gray-700:  #374151;
-      --gray-500:  #6b7280;
-      --gray-200:  #e5e7eb;
-      --gray-100:  #f3f4f6;
-      --white:     #ffffff;
-      --radius:    12px;
-
       --black: #000000;
+      --white: #ffffff;
       --gold:  #CFB87C;
       --gray-light: #A2A4A3;
 
@@ -38,14 +25,16 @@
     }
 
     html, body {
-      min-height: 100%;
-      min-height: 100dvh;
+      height: 100%;
+      height: 100dvh;
       overflow-x: hidden;
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--black);
       color: var(--white);
+      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
@@ -53,7 +42,6 @@
     }
     a { text-decoration: none; color: inherit; }
 
-    /* ── Nav ── */
     .nav {
       display: flex;
       align-items: center;
@@ -66,7 +54,6 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      flex-shrink: 0;
     }
     .logo {
       display: flex;
@@ -78,93 +65,99 @@
       color: var(--gold);
       white-space: nowrap;
     }
-    .nav-right {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: .5rem clamp(1rem, 3vw, 2rem);
-    }
     @media (max-width: 560px) {
       .nav { justify-content: center; text-align: center; }
-      .nav-right { justify-content: center; width: 100%; }
     }
-    .nav-link {
-      font-family: var(--font-body);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      font-size: clamp(.75rem, 1.6vw, .9rem);
-      color: var(--white);
-      white-space: nowrap;
-    }
-    .nav-link:hover { color: var(--gold); }
 
-    /* ── Hero main (image + actions, centered as a group) ── */
-    .hero-main {
+    main {
       flex: 1;
-      min-height: 0;
+      width: 100%;
       display: flex;
       flex-direction: column;
+      align-items: center;
       justify-content: center;
-      justify-content: safe center;
+      text-align: center;
+      padding: 3rem clamp(1.25rem, 5vw, 3rem) 5rem;
+      font-family: var(--font-body);
+    }
+    main h1 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      color: var(--white);
+      font-size: clamp(2.8rem, 9.3vw - .8rem, 6rem);
+      letter-spacing: .02em;
+      margin-bottom: 1.25rem;
+    }
+    @media (max-width: 620px) {
+      main h1 {
+        font-size: clamp(1.8rem, 9vw, 2.6rem);
+        line-height: 1.2;
+      }
+    }
+    main .tagline {
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: clamp(.85rem, 1.8vw, 1.05rem);
+      margin-bottom: 1.5rem;
+    }
+    main p {
+      color: var(--gray-light);
+      line-height: 1.6;
+      max-width: 560px;
+      font-size: clamp(.9rem, 1.6vw, 1.05rem);
     }
 
-    /* ── Hero image ── */
-    .hero-image-wrap {
+    .signup-form {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: clamp(.75rem, 3dvh, 2rem) 1.5rem;
-    }
-    .hero-image-wrap img {
-      width: auto;
-      height: auto;
-      max-width: min(720px, 100%);
-      max-height: clamp(180px, 54dvh, 700px);
-      object-fit: contain;
-    }
-
-    /* ── Hero actions ── */
-    .hero-actions {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: clamp(.6rem, 2vw, 1.25rem);
-      padding: 0 1.5rem clamp(1.25rem, 4dvh, 3rem);
       flex-wrap: wrap;
-      flex-shrink: 0;
+      justify-content: center;
+      gap: .75rem;
+      margin-top: 2rem;
+      width: 100%;
+      max-width: 420px;
     }
-    .hero-btn {
+    .signup-input {
+      flex: 1 1 240px;
+      padding: .8rem 1rem;
+      background: transparent;
+      border: 2px solid var(--gray-light);
+      border-radius: 8px;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: .95rem;
+    }
+    .signup-input::placeholder { color: var(--gray-light); }
+    .signup-input:focus { outline: none; border-color: var(--gold); }
+    .signup-btn {
+      flex: 0 0 auto;
+      padding: .8rem 1.4rem;
+      background: var(--gold);
+      color: var(--black);
+      border: 2px solid var(--gold);
+      border-radius: 8px;
       font-family: var(--font-body);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .06em;
-      font-size: clamp(.8rem, 1.8vw, 1rem);
-      padding: clamp(.7rem, 1.8dvh, 1.05rem) clamp(1.3rem, 3.4vw, 2rem);
-      border-radius: 12px;
-      border: 2px solid var(--gold);
+      font-size: .85rem;
+      cursor: pointer;
       transition: background .2s, color .2s;
-      white-space: nowrap;
     }
-    .hero-btn-outline {
-      background: var(--black);
-      color: var(--gold);
+    .signup-btn:hover:not(:disabled) { background: var(--black); color: var(--gold); }
+    .signup-btn:disabled { opacity: .6; cursor: not-allowed; }
+    .signup-message {
+      margin-top: 1rem;
+      font-size: .85rem;
+      min-height: 1.2em;
     }
-    .hero-btn-outline:hover {
-      background: var(--gold);
-      color: var(--black);
-    }
-    .hero-btn-solid {
-      background: var(--gold);
-      color: var(--black);
-    }
-    .hero-btn-solid:hover {
-      background: var(--black);
-      color: var(--gold);
-    }
+    .signup-message.success { color: var(--gold); }
+    .signup-message.error { color: #e07a5f; }
 
     /* ── Footer ── */
     footer {
+      margin-top: auto;
       flex-shrink: 0;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -186,7 +179,6 @@
     .footer-logo { height: clamp(24px, 8vw, 54px); width: auto; justify-self: center; }
     .footer-text { justify-self: start; }
 
-    /* ── Narrow screens: shrink the logo/text so the row still fits on one line ── */
     @media (max-width: 560px) {
       footer {
         column-gap: clamp(.4rem, 2vw, .75rem);
@@ -194,34 +186,26 @@
         text-align: center;
       }
       .footer-link, .footer-text { justify-self: center; }
-      .hero-actions { gap: .75rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── Nav ── -->
   <nav class="nav">
     <a href="index.html" class="logo">THE LUNCH GAMES</a>
-    <div class="nav-right">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="faq.html" class="nav-link">FAQs</a>
-      <a href="dashboard.html" class="nav-link">Dashboard</a>
-      <a href="login.html" class="nav-link" id="signin-nav-btn">Login</a>
-    </div>
   </nav>
 
-  <div class="hero-main">
-    <div class="hero-image-wrap">
-      <img src="images/home-hero.svg" alt="The Lunch Games">
-    </div>
+  <main>
+    <p class="tagline">Coming soon</p>
+    <h1>THE LUNCH GAMES</h1>
+    <p>The Lunch Games is a semester-long competition to see who can score the most free meals on campus. But every free lunch comes with a price. Do you have what it takes to win the Golden Lunch Tray? Sign up to be alerted when we launch for the Spring 2027 semester.</p>
 
-    <div class="hero-actions">
-      <a href="faq.html" class="hero-btn hero-btn-outline">Learn More</a>
-      <a href="dashboard.html" class="hero-btn hero-btn-solid">Live Dashboard</a>
-      <a href="login.html" class="hero-btn hero-btn-outline">Join the Fray</a>
-    </div>
-  </div>
+    <form class="signup-form" id="signup-form">
+      <input type="email" class="signup-input" id="signup-email" placeholder="you@colorado.edu" required>
+      <button type="submit" class="signup-btn" id="signup-btn">Notify Me</button>
+    </form>
+    <p class="signup-message" id="signup-message"></p>
+  </main>
 
   <footer>
     <a href="https://lab.whaaat.io" class="footer-link">From the humans of whaaaat!?</a>
@@ -232,12 +216,39 @@
   <script type="module">
     import { supabase } from './js/supabase.js'
 
-    const { data: { session } } = await supabase.auth.getSession()
-    if (session) {
-      const signinBtn = document.getElementById('signin-nav-btn')
-      signinBtn.href = 'profile.html'
-      signinBtn.textContent = 'Profile'
-    }
+    const form = document.getElementById('signup-form')
+    const emailInput = document.getElementById('signup-email')
+    const btn = document.getElementById('signup-btn')
+    const message = document.getElementById('signup-message')
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const email = emailInput.value.trim()
+      message.textContent = ''
+      message.className = 'signup-message'
+      btn.disabled = true
+      btn.textContent = 'Submitting...'
+
+      const { error } = await supabase.from('waitlist').insert({ email })
+
+      btn.disabled = false
+      btn.textContent = 'Notify Me'
+
+      if (error) {
+        if (error.code === '23505') {
+          message.textContent = "You're already on the list!"
+          message.classList.add('success')
+        } else {
+          message.textContent = 'Something went wrong. Please try again.'
+          message.classList.add('error')
+        }
+        return
+      }
+
+      form.reset()
+      message.textContent = "You're on the list! We'll be in touch."
+      message.classList.add('success')
+    })
   </script>
 </body>
 </html>
