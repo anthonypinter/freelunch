@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Hot Dog Games | Submit a Dog</title>
+  <link rel="icon" type="image/png" href="images/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="images/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="images/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Hot Dog Games" />
+  <link rel="manifest" href="images/favicon/site.webmanifest" />
+  <link rel="stylesheet" href="https://use.typekit.net/otp1fyf.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:        #000000;
+      --white:        #ffffff;
+      --gold:         #CFB87C;
+      --gray-light:   #A2A4A3;
+      --gray-lighter: #E8E8E8;
+
+      --gray-900:  #111827;
+      --gray-700:  #374151;
+      --gray-500:  #6b7280;
+      --gray-300:  #d1d5db;
+      --gray-200:  #e5e7eb;
+      --gray-100:  #f3f4f6;
+      --green-100: #d8f3dc;
+      --green-500: #40916c;
+      --green-700: #2d6a4f;
+      --red-100:   #fee2e2;
+      --red-700:   #b91c1c;
+
+      --font-display: "cheap-pine", sans-serif;
+      --font-body:    "ivystyle-sans", sans-serif;
+
+      --radius: 12px;
+    }
+
+    html, body { height: 100%; overflow-x: hidden; }
+    body {
+      font-family: var(--font-body);
+      background: var(--black);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Header ── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      row-gap: .5rem;
+      padding: .75rem clamp(1.25rem, 4vw, 2.5rem);
+      min-height: 92px;
+      background: var(--black);
+      flex-shrink: 0;
+    }
+    .logo-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .5rem 1rem;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3.5vw, 2.35rem);
+      letter-spacing: .03em;
+      color: var(--gold);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .header-links {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .5rem clamp(1rem, 3vw, 2rem);
+    }
+    .header-links a {
+      font-family: var(--font-body);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: clamp(.75rem, 1.6vw, .85rem);
+      color: var(--white);
+      text-decoration: none;
+      transition: color .2s;
+      white-space: nowrap;
+    }
+    .header-links a:hover { color: var(--gold); }
+    .signout-btn {
+      background: none;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      padding: .45rem 1.1rem;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .signout-btn:hover { background: var(--gold); color: var(--black); }
+    @media (max-width: 700px) {
+      .page-header { justify-content: center; text-align: center; }
+      .logo-group, .header-links { justify-content: center; width: 100%; }
+    }
+
+    /* ── Layout ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2.5rem 1rem 3rem;
+    }
+
+    .submit-card {
+      background: var(--gray-lighter);
+      border: 1px solid rgba(207,184,124,.6);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 520px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 1.5rem 1.75rem 1.25rem;
+      border-bottom: 1px solid rgba(0,0,0,.15);
+    }
+    .card-header h1 {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--black);
+    }
+    .card-subtitle {
+      margin-top: .35rem;
+      font-size: .85rem;
+      color: var(--gray-700);
+    }
+
+    .card-body { padding: 1.75rem; }
+
+    /* ── Drop zone ── */
+    .drop-zone {
+      border: 2px dashed var(--gray-300);
+      border-radius: 10px;
+      padding: 2.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      margin-bottom: 1.25rem;
+    }
+    .drop-zone:hover,
+    .drop-zone.drag-over {
+      border-color: var(--green-500);
+      background: var(--green-100);
+    }
+    .drop-icon { display: inline-flex; width: 2.5rem; height: 2.5rem; margin-bottom: .5rem; color: var(--gray-500); }
+    .drop-label {
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+    .drop-hint {
+      font-size: .8rem;
+      color: var(--gray-500);
+      margin-top: .25rem;
+    }
+
+    /* ── Preview ── */
+    .photo-preview {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      background: var(--gray-100);
+      aspect-ratio: 4/3;
+    }
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .remove-btn {
+      position: absolute;
+      top: .6rem;
+      right: .6rem;
+      background: rgba(0,0,0,.55);
+      color: var(--white);
+      border: none;
+      border-radius: 999px;
+      padding: .3rem .75rem;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .remove-btn:hover { background: rgba(0,0,0,.8); }
+
+    /* ── Fields ── */
+    .field { margin-bottom: 1.25rem; }
+    .field label {
+      display: block;
+      font-family: var(--font-body);
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--gray-700);
+      margin-bottom: .4rem;
+    }
+    .text-input {
+      width: 100%;
+      padding: .7rem .9rem;
+      border: 1.5px solid rgba(0,0,0,.2);
+      border-radius: 8px;
+      font-size: .95rem;
+      font-family: var(--font-body);
+      color: var(--black);
+      background: var(--white);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .text-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(207,184,124,.3);
+    }
+    .text-input::placeholder { color: var(--gray-500); }
+    .field-hint {
+      font-size: .75rem;
+      color: var(--gray-500);
+      margin-top: .35rem;
+    }
+
+    /* ── Toppings ── */
+    .topping-box {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .4rem;
+      padding: .5rem .6rem;
+      border: 1.5px solid rgba(0,0,0,.2);
+      border-radius: 8px;
+      background: var(--white);
+      cursor: text;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .topping-box:focus-within {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(207,184,124,.3);
+    }
+    .topping-box input {
+      flex: 1 1 120px;
+      min-width: 0;
+      border: none;
+      outline: none;
+      padding: .25rem .2rem;
+      font-family: var(--font-body);
+      font-size: .95rem;
+      color: var(--black);
+      background: transparent;
+    }
+    .topping-box input::placeholder { color: var(--gray-500); }
+    .topping-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      background: var(--gold);
+      color: var(--black);
+      border-radius: 999px;
+      padding: .25rem .35rem .25rem .7rem;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+    .topping-chip button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0,0,0,.15);
+      color: var(--black);
+      font-size: .8rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .topping-chip button:hover { background: rgba(0,0,0,.3); }
+    .topping-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-top: .6rem;
+    }
+    .suggestion-btn {
+      background: none;
+      border: 1.5px solid rgba(0,0,0,.2);
+      border-radius: 999px;
+      padding: .25rem .7rem;
+      font-family: var(--font-body);
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      cursor: pointer;
+      transition: border-color .2s, background .2s, color .2s;
+    }
+    .suggestion-btn:hover { border-color: var(--gold); color: var(--black); }
+    .suggestion-btn.added {
+      background: rgba(207,184,124,.25);
+      border-color: var(--gold);
+      color: var(--black);
+    }
+
+    /* ── Message ── */
+    .form-message {
+      border-radius: 8px;
+      padding: .75rem 1rem;
+      font-size: .875rem;
+      font-weight: 500;
+      margin-bottom: 1.1rem;
+    }
+    .form-message.error   { background: var(--red-100);   color: var(--red-700); }
+    .form-message.success { background: var(--green-100); color: var(--green-700); }
+
+    /* ── Submit ── */
+    .submit-btn {
+      width: 100%;
+      padding: .8rem;
+      background: var(--gold);
+      color: var(--black);
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: .9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .submit-btn:hover:not(:disabled) { background: var(--black); color: var(--gold); }
+    .submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <div class="logo-group">
+      <a href="index.html" class="logo">THE HOT DOG GAMES</a>
+    </div>
+    <nav class="header-links">
+      <a href="index.html">Swipe</a>
+      <a href="submit.html">Submit a Dog</a>
+      <button class="signout-btn" id="signout-btn">Sign out</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="submit-card">
+
+      <div class="card-header">
+        <h1>Submit a Hot Dog</h1>
+        <p class="card-subtitle">Snap your dog, list what's on it, and let campus judge.</p>
+      </div>
+
+      <div class="card-body">
+
+        <div id="form-message" class="form-message" hidden></div>
+
+        <form id="submit-form" novalidate>
+
+          <input id="photo-input" type="file" accept="image/*" hidden>
+
+          <!-- Drop zone -->
+          <div id="drop-zone" class="drop-zone">
+            <span class="drop-icon"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.6-2.2A1 1 0 0 1 9.4 5h5.2a1 1 0 0 1 .8.4L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13.5" r="3.4"/></svg></span>
+            <p class="drop-label">Click or drag a photo of your dog here</p>
+            <p class="drop-hint">Good light, close up, toppings visible</p>
+          </div>
+
+          <!-- Preview -->
+          <div id="photo-preview" class="photo-preview" hidden>
+            <img id="preview-img" src="" alt="Preview">
+            <button type="button" class="remove-btn" id="remove-photo">Remove</button>
+          </div>
+
+          <div class="field">
+            <label for="dog-name">Name your dog <span style="text-transform:none;font-weight:500">(optional)</span></label>
+            <input id="dog-name" class="text-input" type="text" maxlength="60"
+                   placeholder="e.g. The Ralphie Dog">
+          </div>
+
+          <div class="field">
+            <label for="topping-input">Toppings</label>
+            <div class="topping-box" id="topping-box">
+              <input id="topping-input" type="text" maxlength="40" autocomplete="off"
+                     placeholder="Type a topping, press Enter">
+            </div>
+            <p class="field-hint">Or tap to add:</p>
+            <div class="topping-suggestions" id="topping-suggestions"></div>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submit-btn">Submit This Dog</button>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <script type="module" src="js/submit.js"></script>
+</body>
+</html>

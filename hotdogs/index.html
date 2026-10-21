@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Hot Dog Games | Swipe</title>
+  <link rel="icon" type="image/png" href="images/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="images/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="images/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Hot Dog Games" />
+  <link rel="manifest" href="images/favicon/site.webmanifest" />
+  <link rel="stylesheet" href="https://use.typekit.net/otp1fyf.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:      #000000;
+      --white:      #ffffff;
+      --gold:       #CFB87C;
+      --gray-light: #A2A4A3;
+      --gray-lighter: #E8E8E8;
+
+      --gray-900:  #111827;
+      --gray-700:  #374151;
+      --gray-500:  #6b7280;
+      --gray-200:  #e5e7eb;
+      --gray-100:  #f3f4f6;
+      --red:       #e07a5f;
+
+      --font-display: "cheap-pine", sans-serif;
+      --font-body:    "ivystyle-sans", sans-serif;
+
+      --radius:    12px;
+    }
+
+    html, body { min-height: 100%; overflow-x: hidden; }
+    body {
+      font-family: var(--font-body);
+      background: var(--black);
+      color: var(--white);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Header ── */
+    .page-header {
+      background: var(--black);
+      flex-wrap: wrap;
+      row-gap: .5rem;
+      padding: .75rem clamp(1.25rem, 4vw, 2.5rem);
+      min-height: 92px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3.5vw, 2.35rem);
+      letter-spacing: .03em;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+    .header-links {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .5rem clamp(1rem, 3vw, 2rem);
+    }
+    .header-links a {
+      font-family: var(--font-body);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: clamp(.75rem, 1.6vw, .85rem);
+      color: var(--white);
+      transition: color .2s;
+      white-space: nowrap;
+    }
+    .header-links a:hover { color: var(--gold); }
+    .header-links a.active { color: var(--gold); }
+    .signout-btn {
+      background: none;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      padding: .45rem 1.1rem;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .signout-btn:hover { background: var(--gold); color: var(--black); }
+    @media (max-width: 700px) {
+      .page-header { justify-content: center; text-align: center; }
+      .header-links { justify-content: center; width: 100%; }
+    }
+
+    /* ── Page layout ── */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 1rem 1.25rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .swipe-heading-row {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .35rem;
+      margin-bottom: 1.25rem;
+      text-align: center;
+    }
+    .swipe-heading {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(2.6rem, 11vw, 3.6rem);
+      line-height: 1.05;
+      letter-spacing: .02em;
+      color: var(--white);
+    }
+    .dogs-left {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    /* ── Deck ── */
+    .deck {
+      position: relative;
+      width: 100%;
+      height: min(64dvh, 580px);
+      min-height: 400px;
+    }
+    .dog-card {
+      position: absolute;
+      inset: 0;
+      background: var(--gray-lighter);
+      border: 1px solid rgba(207,184,124,.6);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0,0,0,.5);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: pan-y;
+      transition: transform .3s ease, opacity .3s ease;
+      --yum: 0;
+      --nope: 0;
+    }
+    .dog-card[data-pos="0"] { z-index: 3; cursor: grab; }
+    .dog-card[data-pos="1"] { z-index: 2; transform: translateY(28px) scale(.95); }
+    .dog-card[data-pos="2"] { z-index: 1; transform: translateY(54px) scale(.9); opacity: .6; }
+    .dog-card.dragging { transition: none; cursor: grabbing; }
+    .dog-card.flying { transition: transform .4s ease-in, opacity .4s ease-in; opacity: 0; pointer-events: none; }
+
+    .dog-photo {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      background: var(--black);
+    }
+    .dog-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    .stamp {
+      position: absolute;
+      top: 1.5rem;
+      padding: .3rem .9rem;
+      border: 4px solid;
+      border-radius: 10px;
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      letter-spacing: .05em;
+      background: rgba(0,0,0,.35);
+      pointer-events: none;
+    }
+    .stamp.yum  { left: 1.25rem;  color: var(--gold); border-color: var(--gold); transform: rotate(-14deg); opacity: var(--yum); }
+    .stamp.nope { right: 1.25rem; color: var(--red);  border-color: var(--red);  transform: rotate(14deg);  opacity: var(--nope); }
+
+    .dog-info {
+      padding: 1rem 1.1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      flex-shrink: 0;
+    }
+    .dog-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1.3;
+    }
+    .topping-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .35rem;
+      max-height: 4.4rem;
+      overflow: hidden;
+    }
+    .topping-chip {
+      background: rgba(207,184,124,.3);
+      border: 1px solid rgba(207,184,124,.8);
+      color: var(--black);
+      border-radius: 999px;
+      padding: .2rem .65rem;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .dog-user {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding-top: .6rem;
+      border-top: 1px solid rgba(0,0,0,.1);
+    }
+    .user-avatar {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .user-avatar-fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gold);
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--black);
+    }
+    .dog-user-name {
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--black);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+      min-width: 0;
+    }
+    .dog-time {
+      font-size: .72rem;
+      color: var(--gray-500);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── Swipe buttons ── */
+    .swipe-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2.25rem;
+    }
+    .swipe-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--black);
+      border: 2px solid;
+      cursor: pointer;
+      transition: background .2s, color .2s, transform .1s;
+    }
+    .swipe-btn svg { width: 28px; height: 28px; }
+    .swipe-btn:active { transform: scale(.92); }
+    .swipe-btn:disabled { opacity: .4; cursor: default; }
+    .swipe-btn.nope { color: var(--red);  border-color: var(--red); }
+    .swipe-btn.yum  { color: var(--gold); border-color: var(--gold); }
+    .swipe-btn.nope:hover:not(:disabled) { background: var(--red);  color: var(--black); }
+    .swipe-btn.yum:hover:not(:disabled)  { background: var(--gold); color: var(--black); }
+    .swipe-hint {
+      margin-top: .9rem;
+      font-size: .78rem;
+      color: var(--gray-light);
+      text-align: center;
+    }
+
+    /* ── Messages (loading / signed out / out of dogs) ── */
+    .deck-message {
+      width: 100%;
+      background: var(--gray-lighter);
+      border: 1px solid rgba(207,184,124,.6);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: var(--black);
+    }
+    .deck-message h2 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 2rem;
+      letter-spacing: .02em;
+      margin-bottom: .5rem;
+    }
+    .deck-message p {
+      font-size: .95rem;
+      color: var(--gray-700);
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+    }
+    .loading-msg {
+      color: var(--gray-light);
+      font-size: .95rem;
+      padding: 2rem 0;
+    }
+    .cta-btn {
+      display: inline-block;
+      padding: .75rem 1.5rem;
+      background: var(--gold);
+      color: var(--black);
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: .85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      transition: background .2s, color .2s;
+    }
+    .cta-btn:hover { background: var(--black); color: var(--gold); }
+
+    /* ── Top dogs ── */
+    .top-dogs {
+      width: 100%;
+      margin-top: 2rem;
+    }
+    .top-dogs h2 {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--gold);
+      margin-bottom: .75rem;
+    }
+    .top-dog-list {
+      list-style: none;
+      background: var(--gray-lighter);
+      border: 1px solid rgba(207,184,124,.6);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .top-dog-row {
+      display: grid;
+      grid-template-columns: 2.25rem 48px 1fr auto;
+      align-items: center;
+      gap: .75rem;
+      padding: .7rem 1rem;
+      color: var(--black);
+    }
+    .top-dog-row + .top-dog-row { border-top: 1px solid rgba(0,0,0,.1); }
+    .top-dog-rank {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      text-align: center;
+    }
+    .top-dog-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: var(--black);
+    }
+    .top-dog-text { min-width: 0; }
+    .top-dog-name {
+      font-size: .9rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .top-dog-toppings {
+      font-size: .75rem;
+      color: var(--gray-700);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .top-dog-score {
+      text-align: right;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    .top-dog-score small {
+      display: block;
+      font-size: .65rem;
+      font-weight: 600;
+      color: var(--gray-500);
+      white-space: nowrap;
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 1.5rem;
+      transform: translateX(-50%);
+      background: var(--red);
+      color: var(--black);
+      font-size: .85rem;
+      font-weight: 700;
+      padding: .7rem 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.45);
+      z-index: 100;
+    }
+
+    /* ── Footer ── */
+    footer {
+      flex-shrink: 0;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      column-gap: clamp(.75rem, 3vw, 1.5rem);
+      padding: 1rem clamp(1.25rem, 4vw, 2.5rem) clamp(1.5rem, 5vh, 3.5rem);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: clamp(.65rem, 1.6vw, .85rem);
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    .footer-link {
+      text-decoration: none;
+      color: var(--white);
+      justify-self: end;
+    }
+    .footer-link:hover { color: var(--white); }
+    .footer-logo { height: clamp(24px, 8vw, 54px); width: auto; justify-self: center; }
+    .footer-text { justify-self: start; }
+
+    @media (max-width: 560px) {
+      footer {
+        column-gap: clamp(.4rem, 2vw, .75rem);
+        font-size: clamp(.55rem, 2.4vw, .7rem);
+        text-align: center;
+      }
+      .footer-link, .footer-text { justify-self: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <a href="index.html" class="logo">THE HOT DOG GAMES</a>
+    <nav class="header-links">
+      <a href="index.html" class="active">Swipe</a>
+      <a href="submit.html">Submit a Dog</a>
+      <a href="login.html" id="login-nav-link">Log In to Vote</a>
+      <button class="signout-btn" id="signout-btn" hidden>Sign out</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="swipe-heading-row">
+      <h1 class="swipe-heading">Would You Eat It?</h1>
+      <span class="dogs-left" id="dogs-left"></span>
+    </div>
+
+    <div id="deck-area">
+      <p class="loading-msg">Loading dogs…</p>
+    </div>
+
+    <div id="swipe-ui" hidden style="width:100%">
+      <div class="deck" id="deck"></div>
+      <div class="swipe-controls">
+        <button class="swipe-btn nope" id="nope-btn" aria-label="Nope — swipe left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+        <button class="swipe-btn yum" id="yum-btn" aria-label="Yum — swipe right">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20Z"/></svg>
+        </button>
+      </div>
+      <p class="swipe-hint">Swipe right if you'd eat it, left if you wouldn't. Arrow keys work too.</p>
+    </div>
+
+    <section class="top-dogs" id="top-dogs" hidden>
+      <h2>Top Dogs</h2>
+      <ol class="top-dog-list" id="top-dog-list"></ol>
+    </section>
+  </main>
+
+  <footer>
+    <a href="https://lab.whaaat.io" class="footer-link">From the humans of whaaaat!?</a>
+    <img src="images/silversaucerlogo.svg" alt="The Society of the Silver Saucers" class="footer-logo">
+    <span class="footer-text">The society of the silver saucers</span>
+  </footer>
+
+  <script type="module" src="js/swipe.js"></script>
+</body>
+</html>

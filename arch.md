@@ -228,6 +228,102 @@ const { data } = await supabase.from('leaderboard_weekly').select('*').limit(10)
 
 ---
 
+## Step 7b — Voting on Meals (Optional)
+
+Lets any signed-in user upvote or downvote an approved meal — one vote (either direction) per user per meal. Back in the **SQL Editor**, run:
+
+```sql
+-- One row per (meal, voter); value is +1 (upvote) or -1 (downvote)
+CREATE TABLE meal_votes (
+  id         uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  meal_id    uuid REFERENCES meals(id) ON DELETE CASCADE,
+  user_id    uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  value      smallint NOT NULL CHECK (value IN (1, -1)),
+  created_at timestamptz DEFAULT now(),
+  UNIQUE (meal_id, user_id)  -- enforces one vote per user per meal
+);
+
+ALTER TABLE meal_votes ENABLE ROW LEVEL SECURITY;
+
+-- Vote counts are public
+CREATE POLICY "Anyone can view votes"
+  ON meal_votes FOR SELECT USING (true);
+
+-- Users can only vote as themselves, and only on approved meals
+CREATE POLICY "Users can vote for approved meals"
+  ON meal_votes FOR INSERT
+  WITH CHECK (
+    auth.uid() = user_id
+    AND EXISTS (
+      SELECT 1 FROM meals
+      WHERE meals.id = meal_id AND meals.status = 'approved'
+    )
+  );
+
+-- Users can flip their own vote (upvote <-> downvote)
+CREATE POLICY "Users can change their own vote"
+  ON meal_votes FOR UPDATE
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+-- Users can remove their own vote (clicking the same direction again)
+CREATE POLICY "Users can remove their own vote"
+  ON meal_votes FOR DELETE USING (auth.uid() = user_id);
+
+-- Aggregate score per meal
+CREATE VIEW meal_vote_counts AS
+SELECT
+  meal_id,
+  COALESCE(SUM(value), 0)            AS score,
+  COUNT(*) FILTER (WHERE value = 1)  AS upvotes,
+  COUNT(*) FILTER (WHERE value = -1) AS downvotes
+FROM meal_votes
+GROUP BY meal_id;
+
+-- "Most Loved" leaderboard — net vote score across each user's approved meals
+CREATE VIEW leaderboard_loved AS
+SELECT
+  m.user_id,
+  p.display_name,
+  p.username,
+  COALESCE(SUM(mv.value), 0) AS vote_score
+FROM meals m
+JOIN meal_votes mv ON mv.meal_id = m.id
+LEFT JOIN profiles p ON p.id = m.user_id
+WHERE m.status = 'approved'
+GROUP BY m.user_id, p.display_name, p.username
+ORDER BY vote_score DESC;
+```
+
+> **Already ran the earlier (heart/like) version of this SQL?** If you have no real votes yet, the simplest fix is to drop and recreate: `DROP VIEW IF EXISTS leaderboard_loved; DROP VIEW IF EXISTS meal_vote_counts; DROP TABLE IF EXISTS meal_votes;` — then run the block above. If you already have votes you want to preserve as upvotes, ask for the non-destructive `ALTER TABLE ... ADD COLUMN value` migration instead.
+
+Reading scores + casting a vote in JS:
+
+```javascript
+// Scores for a set of meals
+const { data: counts } = await supabase
+  .from('meal_vote_counts')
+  .select('meal_id, score, upvotes, downvotes')
+
+// The current user's own vote direction per meal (1, -1, or absent)
+const { data: myVotes } = await supabase
+  .from('meal_votes')
+  .select('meal_id, value')
+  .eq('user_id', session.user.id)
+
+// Cast/replace a vote (upsert handles both first vote and flipping direction)
+await supabase
+  .from('meal_votes')
+  .upsert({ meal_id, user_id: session.user.id, value: 1 }, { onConflict: 'meal_id,user_id' })
+
+// Remove a vote (clicking the same direction again)
+await supabase.from('meal_votes').delete().eq('meal_id', meal_id).eq('user_id', session.user.id)
+```
+
+See `feed.html` / `js/feed.js` for the full implementation — a public feed of approved meals with an upvote/downvote control on each card. The `leaderboard_loved` view also powers a fourth "Most Loved" tab in the dashboard's leaderboard cycle (`js/dashboard.js`).
+
+---
+
 ## Step 8 — Deploy
 
 Whenever you're ready to publish changes:

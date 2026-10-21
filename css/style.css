@@ -216,6 +216,29 @@ a { text-decoration: none; color: inherit; }
   height: 5rem;
   color: var(--gray-light);
 }
+.carousel-vote-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(207,184,124,.5);
+  border-radius: 999px;
+  padding: .4rem .75rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--gold);
+}
+.carousel-vote-badge svg { width: 14px; height: 14px; flex-shrink: 0; }
+.carousel-vote-badge.negative {
+  color: #e07a5f;
+  border-color: rgba(224,122,95,.5);
+}
+
 .carousel-caption {
   position: absolute;
   bottom: 0; left: 0; right: 0;
