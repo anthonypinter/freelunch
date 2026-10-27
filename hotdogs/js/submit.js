@@ -157,6 +157,7 @@ form.addEventListener('submit', async (e) => {
   if (toppingIn.value.trim()) addTopping(toppingIn.value)
 
   if (!selectedFile) { showMessage('Please add a photo of your dog.', 'error'); return }
+  if (!nameInput.value.trim()) { showMessage('Please give your dog a name.', 'error'); return }
   if (!toppings.length) { showMessage('Please add at least one topping.', 'error'); return }
 
   setLoading(true)
@@ -177,7 +178,7 @@ form.addEventListener('submit', async (e) => {
 
     const { error: insertError } = await supabase.from('hotdogs').insert({
       user_id:   session.user.id,
-      name:      nameInput.value.trim() || null,
+      name:      nameInput.value.trim(),
       toppings,
       photo_url: photoUrl,
     })
